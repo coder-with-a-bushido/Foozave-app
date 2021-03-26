@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1037439696149",
+    "project_id": "foodzapp-295d2",
+    "storage_bucket": "foodzapp-295d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037439696149:android:c19f6b799f26b4d7d83d1c",
+        "android_client_info": {
+          "package_name": "me.coderwithabushido.foozave"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037439696149-p2oria664fmtvekfol34e4sqdu0b9nel.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdQnOdlH1t1MMoLdfZgkIwmQNzhxl2vB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037439696149-p2oria664fmtvekfol34e4sqdu0b9nel.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
