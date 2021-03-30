@@ -173,9 +173,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 14.0);
                       } else {
                         try {
-                          FirebaseAuth.instance.signInWithEmailAndPassword(
-                              email: userTextControllers[0].text,
-                              password: userTextControllers[1].text);
+                          FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: userTextControllers[0].text,
+                                  password: userTextControllers[1].text)
+                              .then((value) => Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MainScreen())));
                         } catch (e) {
                           print(e);
                           userTextControllers[0].text = '';

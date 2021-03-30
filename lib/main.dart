@@ -1,41 +1,68 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 // Import the firebase_core plugin
-import 'package:firebase_core/firebase_core.dart';
+
+import 'package:foozave/screens/introscreen.dart';
 import 'package:foozave/screens/loginscreen.dart';
 import 'package:foozave/screens/mainscreen.dart';
-import 'package:foozave/utils/sizeconfig.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(App());
 }
 
-class App extends StatelessWidget {
-  // Create the initialization Future outside of `build`:
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+class App extends StatefulWidget {
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  // Set default `_initialized` and `_error` state to false
+  bool _initialized = false;
+  bool _error = false;
+
+  // Define an async function to initialize FlutterFire
+  void initializeFlutterFire() async {
+    try {
+      // Wait for Firebase to initialize and set `_initialized` state to true
+      await Firebase.initializeApp();
+      setState(() {
+        _initialized = true;
+      });
+    } catch (e) {
+      // Set `_error` state to true if Firebase initialization fails
+      setState(() {
+        _error = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    initializeFlutterFire();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      // Initialize FlutterFire:
-      future: _initialization,
-      builder: (context, snapshot) {
-        // Check for errors
-        if (snapshot.hasError) {
-          return SomethingWentWrong();
-        }
+    // Show error message if initialization failed
+    if (_error) {
+      return SomethingWentWrong();
+    }
 
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MyAwesomeApp();
-        }
+    // Show a loader until FlutterFire is initialized
+    if (!_initialized) {
+    return MaterialApp(home: IntroScreen(goIn: false,));
+    }
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+     
 
-        // Otherwise, show something whilst waiting for initialization to complete
-        return Loading();
-      },
-    );
+    return MaterialApp(home: IntroScreen(goIn: true,));
   }
 }
 
@@ -45,53 +72,3 @@ class SomethingWentWrong extends StatelessWidget {
     return Center(child: Text('Unable to connect to Firebase!'));
   }
 }
-
-class Loading extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-}
-
-class MyAwesomeApp extends StatefulWidget {
-  @override
-  _MyAwesomeAppState createState() => _MyAwesomeAppState();
-}
-
-class _MyAwesomeAppState extends State<MyAwesomeApp> {
-  late final auth;
-  AuthState isSignedin = AuthState.Checking;
-  @override
-  void initState() {
-    auth = FirebaseAuth.instance;
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        setState(() {
-          isSignedin = AuthState.NotSignedIn;
-        });
-        print('User is currently signed out!');
-      } else {
-        setState(() {
-          isSignedin = AuthState.SignedIn;
-        });
-        print('User is signed in!');
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: isSignedin == AuthState.Checking
-          ? Loading()
-          : isSignedin == AuthState.NotSignedIn
-              ? LoginScreen()
-              : MainScreen(),
-    );
-  }
-}
-
-enum AuthState { Checking, SignedIn, NotSignedIn }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foozave/screens/loginscreen.dart';
+import 'package:foozave/screens/mainscreen.dart';
 import 'package:foozave/utils/AppTheme.dart';
 import 'package:foozave/utils/sizeconfig.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -196,36 +197,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all(Spacing.xy(16, 0))),
                 onPressed: () {
-                  if (userTextControllers[1].text.isEmpty ||
-                      userTextControllers[2].text.isEmpty) {
-                    Fluttertoast.showToast(
-                        msg: "Check email and password!",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.black87,
-                        textColor: Colors.white,
-                        fontSize: 14.0);
-                  } else {
-                    try {
-                      FirebaseAuth.instance.createUserWithEmailAndPassword(
-                          email: userTextControllers[1].text,
-                          password: userTextControllers[2].text);
-                    } catch (e) {
-                      print(e);
-                      userTextControllers[0].text = '';
-                      userTextControllers[1].text = '';
-                      userTextControllers[2].text = '';
-                      Fluttertoast.showToast(
-                          msg: "Check email and password!",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.black87,
-                          textColor: Colors.white,
-                          fontSize: 14.0);
-                    }
-                  }
+                  registerUser();
                 },
                 child: Text(
                   "Register",
@@ -253,5 +225,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     ));
+  }
+
+  registerUser() async {
+    if (userTextControllers[1].text.isEmpty ||
+        userTextControllers[2].text.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Check email and password!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black87,
+          textColor: Colors.white,
+          fontSize: 14.0);
+    } else {
+      try {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: userTextControllers[1].text,
+                password: userTextControllers[2].text)
+            .then((value) => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => MainScreen())));
+
+        // await FirebaseAuth.instance.currentUser!
+        //     .updateProfile(displayName: userTextControllers[0].text);
+      } catch (e) {
+        print(e);
+        userTextControllers[0].text = '';
+        userTextControllers[1].text = '';
+        userTextControllers[2].text = '';
+        Fluttertoast.showToast(
+            msg: "Check email and password!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black87,
+            textColor: Colors.white,
+            fontSize: 14.0);
+      }
+    }
   }
 }
