@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 Future postReq(Food food) async {
   try {
     http.Response res = await http.post(
-      Uri.http('192.168.1.7:3000', '/food'),
+      Uri.https('https://glacial-coast-88415.herokuapp.com', '/food'),
       headers: {"Content-Type": "application/json"},
       body: json.encode(food.toJson()),
     );
@@ -47,7 +47,7 @@ Future postReq(Food food) async {
 Future<List<Food>?> getReq() async {
   try {
     http.Response res = await http.get(
-      Uri.http('192.168.1.7:3000', '/food'),
+      Uri.https('https://glacial-coast-88415.herokuapp.com', '/food'), 
       headers: {"Content-Type": "application/json"},
     );
     if (res.statusCode == 200) {
