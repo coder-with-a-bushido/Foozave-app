@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -8,8 +5,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 // Import the firebase_core plugin
 
 import 'package:foozave/screens/introscreen.dart';
-import 'package:foozave/screens/loginscreen.dart';
-import 'package:foozave/screens/mainscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,12 +52,17 @@ class _AppState extends State<App> {
 
     // Show a loader until FlutterFire is initialized
     if (!_initialized) {
-    return MaterialApp(home: IntroScreen(goIn: false,));
+      return MaterialApp(
+          home: IntroScreen(
+        goIn: false,
+      ));
     }
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-     
 
-    return MaterialApp(home: IntroScreen(goIn: true,));
+    return MaterialApp(
+        home: IntroScreen(
+      goIn: true,
+    ));
   }
 }
 

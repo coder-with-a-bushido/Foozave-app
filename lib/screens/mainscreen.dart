@@ -35,23 +35,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     requestPermission();
-    getReq().then((foodlist) async {
-      if (foodlist != null) {
-        coord = await getCurrentLocation();
-        foodlist.forEach((food) {
-          if (Geolocator.distanceBetween(coord.latitude!, coord.longitude!,
-                  food.location.coordinates[0], food.location.coordinates[1]) <=
-              10000) {
-            foods.add(food);
-          }
-        });
-        setState(() {
-          foods.forEach((food) {
-            addMarker(food);
-          });
-        });
-      }
-    });
+    populateMarkers();
     super.initState();
   }
 
@@ -81,10 +65,29 @@ class _MainScreenState extends State<MainScreen> {
         fit: StackFit.expand,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xffF6511F).withAlpha(220),
-        onPressed: _goToMyLocation,
-        child: Icon(Icons.my_location),
+      floatingActionButton: Row(
+        children: [
+          FloatingActionButton(
+            heroTag: "tag1",
+            backgroundColor: Color(0xffF6511F).withAlpha(220),
+            onPressed: _goToMyLocation,
+            child: Icon(Icons.my_location),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          FloatingActionButton(
+            heroTag: "tag2",
+            backgroundColor: Colors.pinkAccent[700],
+            onPressed: () {
+              setState(() {
+                markers = <MarkerId, Marker>{};
+              });
+              populateMarkers();
+            },
+            child: Icon(Icons.refresh),
+          ),
+        ],
       ),
     );
   }
@@ -100,7 +103,7 @@ class _MainScreenState extends State<MainScreen> {
           ImageConfiguration(
             size: Size(10, 10),
           ),
-          'assets/images/Doughnut_marker.png'),
+          'assets/images/Doughnut_marker_small.png'),
       infoWindow: InfoWindow(
           onTap: () {
             showDialog(
@@ -112,6 +115,26 @@ class _MainScreenState extends State<MainScreen> {
     );
     setState(() {
       markers[markerId] = marker;
+    });
+  }
+
+  populateMarkers() {
+    getReq().then((foodlist) async {
+      if (foodlist != null) {
+        coord = await getCurrentLocation();
+        foodlist.forEach((food) {
+          if (Geolocator.distanceBetween(coord.latitude!, coord.longitude!,
+                  food.location.coordinates[0], food.location.coordinates[1]) <=
+              10000) {
+            foods.add(food);
+          }
+        });
+        setState(() {
+          foods.forEach((food) {
+            addMarker(food);
+          });
+        });
+      }
     });
   }
 

@@ -1,5 +1,5 @@
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +18,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   late TextTheme textTheme;
   String dateTimeSelected = DateTime.now().toString();
   List<double> coordinates = [0.0, 0.0];
+  bool locationSelected = false;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
@@ -104,23 +105,34 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                           SizedBox(
                             width: 7,
                           ),
-                          TextButton.icon(
-                              onPressed: () async {
-                                requestPermission();
-                                var loc = await getCurrentLocation();
-                                setState(() {
-                                  coordinates = [
-                                    loc.latitude ?? 0.0,
-                                    loc.longitude ?? 0.0
-                                  ];
-                                });
-                              },
-                              label: Text(
-                                'My Location',
-                                style: TextStyle(color: Color(0xffF6511F)),
-                              ),
-                              icon: Icon(Icons.my_location,
-                                  color: Color(0xffF6511F)))
+                          locationSelected
+                              ? TextButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      coordinates = [0.0, 0.0];
+                                      locationSelected = false;
+                                    });
+                                  },
+                                  label: Text('Selected'),
+                                  icon: Icon(Icons.check))
+                              : TextButton.icon(
+                                  onPressed: () async {
+                                    requestPermission();
+                                    var loc = await getCurrentLocation();
+                                    setState(() {
+                                      coordinates = [
+                                        loc.latitude ?? 0.0,
+                                        loc.longitude ?? 0.0
+                                      ];
+                                      locationSelected = true;
+                                    });
+                                  },
+                                  label: Text(
+                                    'My Location',
+                                    style: TextStyle(color: Color(0xffF6511F)),
+                                  ),
+                                  icon: Icon(Icons.my_location,
+                                      color: Color(0xffF6511F)))
                         ],
                       ),
                     ),
@@ -173,8 +185,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                           DateTimePicker(
                             type: DateTimePickerType.dateTimeSeparate,
                             dateMask: 'd MMM, yyyy',
-                            //controller: dateTimeController,
-                            initialValue: DateTime.now().toString(),
+                            initialValue: DateTime.now()
+                                .add(Duration(hours: 1))
+                                .toString(),
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                             icon: Icon(Icons.event),

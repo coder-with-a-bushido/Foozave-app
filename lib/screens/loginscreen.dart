@@ -2,12 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foozave/screens/mainscreen.dart';
-
 import 'package:foozave/screens/registerscreen.dart';
 import 'package:foozave/utils/AppTheme.dart';
 import 'package:foozave/utils/sizeconfig.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

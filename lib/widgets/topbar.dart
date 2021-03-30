@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foozave/screens/profilescreen.dart';
 import 'package:foozave/widgets/addfoodscreen.dart';
-import 'package:foozave/utils/AppTheme.dart';
 
 class TopBar extends StatefulWidget {
   @override
