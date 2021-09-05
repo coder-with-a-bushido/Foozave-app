@@ -1,16 +1,14 @@
-# foozave
+# Foozave
 
-A new Flutter project.
+Foozave is an app targeting on reducing the food wastage by sharing it with others who need it.
 
-## Getting Started
+The user can both post the food they have in extras with contact details, location, and the time till it will available to pick up and also view posts from others within 10Km range(so that only relevant posts are shown) in the map as markers.
 
-This project is a starting point for a Flutter application.
+The posts are deleted automatically once the "time till they are available" is reached so that it's easy for users to only see appropriate/useful posts.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+[![Watch the video](https://img.youtube.com/vi/5KpJkbEesIk/maxresdefault.jpg)](https://youtu.be/5KpJkbEesIk)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+App made with `Flutter` & `Dart`!
+
+Backend made with `Express`, `MongoDB` and `Node.js`!
